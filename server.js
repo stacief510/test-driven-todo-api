@@ -55,11 +55,16 @@ app.get('/', function homepage(req, res) {
  * ORDER THAT THE TESTS DICTATE.
  */
 
-app.get('/api/todos/search', function search(req, res) {
-
   /* This endpoint responds with the search results from the
    * query in the request. COMPLETE THIS ENDPOINT LAST.
    */
+app.get('/api/todos/search', function search(req, res) {
+  let searchTerm = req.query.q;
+  console.log(searchTerm);
+  let filteredTodos = todos.filter(function(todo){
+    return(todo.task.toLowerCase().includes(searchTerm.toLowerCase()) || todo.description.toLowerCase().includes(searchTerm.toLowerCase()));
+  });
+  res.json({data: filteredTodos});
 });
 
  /* This endpoint responds with all of the todos
@@ -111,12 +116,11 @@ app.put('/api/todos/:id', function update(req, res) {
   var todoIdToUpdate = req.params.id; 
   todos.forEach(function(foundTodo){
     if (foundTodo._id == todoIdToUpdate){
-        foundTodo.task = req.body.task
-        foundTodo.desc = req.body.description
+        foundTodo.task = req.body.task;
+        foundTodo.description = req.body.description;
+        res.json(foundTodo);
     }
-    return todos;
-    });
-    res.json(foundTodo);
+    }); 
   });
 
 
